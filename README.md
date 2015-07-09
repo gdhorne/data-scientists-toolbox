@@ -9,11 +9,13 @@ Download and install the Docker software for Apple Mac OS X, GNU/Linux or Micros
 Retrieve the image and start the container running on the specified port, optionally using the host filesystem for storage as shown in the following examples.
 
 Example 1:
+
     $ docker run -d -p 80:8787 gdhorne/data-scientists-toolbox
 
 In this example any R packages and R scripts created will be stored inside the container. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. You can modify the first port when you run the preceding command-line.
 
 Example 2:
+
     $ docker run -d -p 80:8787 -v /home/me/datascience:/home/dst  gdhorne/data-scientists-toolbox
 
 In this example any R packages and R scripts created will be stored on the host system instead of inside the container. You can modify the host directory from '/home/me/datascience' to whatever is suitable for your environment. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. You can modify the first port when you run the preceding command-line.
@@ -34,6 +36,7 @@ Build the image and start the container running on the specified port optionally
                  image_name:version_tag
 
 Example:
+
     $ git clone https://github.com/gdhorne/data-scientists-toolbox
     $ cd data-scientists-toolbox	    
     $ docker build -t docker build -t data-scientists-toolbox:0.1 .
@@ -46,17 +49,21 @@ Type http://127.0.0.1:8787 in the address field of a web browser to display the 
 Normally a container can be left in running state unless you want to remove the container or power-down the computer system. Simply logging out of the current RStudio session does not shutdown RStudio Server.
 
 After logging out the running container can be shutdown using the command:
+
     $ docker stop container_name
 
 To restart the container use the command:
+
     $ docker start container_name
 
 To determine the container name use the command:
+
     $ docker ps -a
 
-    CONTAINER ID        IMAGE                             COMMAND                CREATED             STATUS		PORTS			NAMES 
+    CONTAINER ID        IMAGE                             COMMAND                CREATED             STATUS             PORTS                   NAMES 
     af963946e2b7        gdhorne/data-scientists-toolbox   "/usr/bin/supervisor   35 minutes ago      Up 35 minutes 	0.0.0.0:80->8787/tcp	boring_fermi
 
 If you prefer a memoerable name for your container use the command:
+
     $ docker rename new_name old_name
 
