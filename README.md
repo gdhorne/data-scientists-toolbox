@@ -1,6 +1,6 @@
 # data-scientists-toolbox
 
-Create a Docker container for RStudio Server from scratch or by fetching the pre-built image from the [Docker](https://www.docker.com) website.
+Create a Docker container for RStudio Server from scratch using the associated GitHub [repository](https://github.com/gdhorne/data-scientists-toolbox) or by fetching the pre-built [image]() from the Docker website.
 
 ## Create a container from a Pre-built Image 
 
