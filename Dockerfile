@@ -47,7 +47,7 @@ RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         libcurl4-gnutls-dev \
         libxml2-dev
 
-RUN	sudo apt-get install -y --no-install-recommends \
+RUN	sudo apt-get install -y \
 	pandoc \
 	texlive \
 	texlive-xetex \
