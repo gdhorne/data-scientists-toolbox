@@ -17,7 +17,7 @@ RUN     sed -i 's/101/0/' /usr/sbin/policy-rc.d
 
 ENV     LOCALE en_GB.UTF-8
 
-RUN     apt-get -y install locales \
+RUN     apt-get install -y locales \
         && echo ${LOCALE} UTF-8 >> /etc/locale.gen \
         && locale-gen ${LOCALE} \
         && /usr/sbin/update-locale LANG=${LOCALE}
@@ -37,9 +37,9 @@ RUN     useradd ${USER} \
 
 RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         >> /etc/apt/sources.list \
-        && apt-key adv --keyserver keys.gnupg.net --recv-key 51716619E084DAB9 \
-        && apt-get update \
-        && apt-get -y install --no-install-recommends \
+       	&& apt-key adv --keyserver keys.gnupg.net --recv-key 51716619E084DAB9 \ 
+	&& apt-get update \
+        && apt-get install -y --no-install-recommends \
         r-base \
         r-base-dev \
         r-doc-info \
@@ -47,12 +47,19 @@ RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         libcurl4-gnutls-dev \
         libxml2-dev
 
+RUN	sudo apt-get install -y --no-install-recommends \
+	pandoc \
+	texlive \
+	texlive-xetex \
+	pandoc-citeproc \
+	texlive-latex-extra
+
 RUN     mkdir -p /etc/R/ \
         && echo "options(repos = list(CRAN = 'https://cran.rstudio.com/'), \
         download.file.method = 'libcurl')" \
         > /etc/R/Rprofile.site
 
-RUN     apt-get -y install --no-install-recommends \
+RUN     apt-get install -y --no-install-recommends \
         curl \
         git \
         git-doc \
@@ -69,7 +76,7 @@ RUN     git config --system user.name ${USER} \
         && git config --system push.default simple \
         && echo "dst:science" | chpasswd
 
-RUN     apt-get -y install --no-install-recommends \
+RUN     apt-get install -y --no-install-recommends \
         wget \
         ca-certificates
 
@@ -81,8 +88,7 @@ RUN     echo "r-libs-user=~/R/packages" >> /etc/rstudio/rsession.conf
 
 ENV     PATH `which rstudio-server`:${PATH}
 
-RUN     apt-get clean \
-        && rm -rf /var/lib/apt/lists/
+RUN     apt-get clean
 
 COPY    supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
