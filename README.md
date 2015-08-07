@@ -23,7 +23,7 @@ In this example any R packages and R scripts created will be stored on the host 
 
 Out of the gate R, RStudio, and Git are already installed as a convenience.
 
-Type http://127.0.0.1:8787 in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'.
+Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'.
 
 ## Build from Scratch
 
@@ -32,7 +32,7 @@ Download and install the Docker software for Apple Mac OS X, GNU/Linux or Micros
 Build the image and start the container running on the specified port optionally using the host filesystem for storage as shown in the example.
 
     $ docker build -t image_name:version_tag path_to_dockerfile
-    $ docker run -d -p container_port:host_port \
+    $ docker run -d -p host_port:container_port \
                  -v host_directory:container_directory \
                  image_name:version_tag
 
@@ -40,10 +40,10 @@ Example:
 
     $ git clone https://github.com/gdhorne/data-scientists-toolbox
     $ cd data-scientists-toolbox	    
-    $ docker build -t docker build -t data-scientists-toolbox:0.1 .
+    $ docker build -t data-scientists-toolbox:0.1 .
     $ docker run -d -p 80:8787 -v /home/me/data:/home/dst data-scientists-toolbox:0.1 
 
-Type http://127.0.0.1:8787 in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'. Changing the password via the RStudio Toolls menu select Shell and type passwd at the prompt.
+Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'. Changing the password via the RStudio Tools menu select Shell and type passwd at the prompt.
 
 ## Starting and Stopping a Container
 
