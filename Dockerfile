@@ -5,8 +5,8 @@ FROM ubuntu:14.04
 MAINTAINER "Gregory D. Horne" horne@member.fsf.org
 
 ENV     ARCH amd64
-ENV     R_VERSION 3.2.1
-ENV     RSTUDIO_VERSION 0.99.451
+ENV     R_VERSION 3.2.2
+ENV     RSTUDIO_VERSION 0.99.484
 
 ENV     DEBIAN_FRONTEND noninteractive
 
@@ -71,6 +71,8 @@ RUN     apt-get install -y --no-install-recommends \
         supervisor \
         sudo
 
+RUN	apt-get install screen
+
 RUN     git config --system user.name ${USER} \
         && git config --system user.email ${USER}@localhost \
         && git config --system push.default simple \
@@ -99,6 +101,6 @@ RUN     mkdir -p /var/log/supervisor \
 
 VOLUME  ${HOME}
 
-EXPOSE  8787
+EXPOSE  80
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -10,16 +10,16 @@ Retrieve the image and start the container running on the specified port, option
 
 Example 1:
 
-    $ docker run -d -p 80:8787 gdhorne/data-scientists-toolbox
+    $ docker run -d -p 80:80 gdhorne/data-scientists-toolbox
 
-In this example any R packages and R scripts created will be stored inside the container. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. You can modify the first port when you run the preceding command-line.
+In this example any R packages and R scripts created will be stored inside the container. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 80. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
 
 Example 2:
 
-    $ docker run -d -p 80:8787 -v /home/me/datascience:/home/dst \
+    $ docker run -d -p 8008:80 -v /home/me/datascience:/home/dst \
         gdhorne/data-scientists-toolbox
 
-In this example any R packages and R scripts created will be stored on the host system instead of inside the container. You can modify the host directory from '/home/me/datascience' to whatever is suitable for your environment. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. You can modify the first port when you run the preceding command-line.
+In this example any R packages and R scripts created will be stored on the host system instead of inside the container. You can modify the host directory from '/home/me/datascience' to whatever is suitable for your environment. The first port 8008 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 80. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
 
 Out of the gate R, RStudio, and Git are already installed as a convenience.
 
@@ -33,40 +33,37 @@ Build the image and start the container running on the specified port optionally
 
     $ docker build -t image_name:version_tag path_to_dockerfile
     $ docker run -d -p host_port:container_port \
-                 -v host_directory:container_directory \
-                 image_name:version_tag
+        -v host_directory:container_directory \
+        image_name:version_tag
 
 Example:
 
     $ git clone https://github.com/gdhorne/data-scientists-toolbox
     $ cd data-scientists-toolbox	    
     $ docker build -t data-scientists-toolbox:0.1 .
-    $ docker run -d -p 80:8787 -v /home/me/data:/home/dst data-scientists-toolbox:0.1 
+    $ docker run -d -p 80:80 -v /home/me/data:/home/dst data-scientists-toolbox:0.1 
 
-Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'. Changing the password via the RStudio Tools menu select Shell and type passwd at the prompt.
+If you omit the ':0.1' a default value of 'latest' is substituted.
 
-## Starting and Stopping a Container
+Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'. Change the password via the RStudio Tools menu select Shell and type passwd at the prompt.
 
-Normally a container can be left in running state unless you want to remove the container or power-down the computer system. Simply logging out of the current RStudio session does not shutdown RStudio Server.
+## Basic Container Management
 
-After logging out the running container can be shutdown using the command:
+Simply logging out of the current RStudio session does not shutdown RStudio Server.
 
-    $ docker stop container_name
+|Action|Command|
+|======|=======|
+|Get container name|docker ps -a|
+|Change container name|docker rename new\_name current\_name|
+|Stop container|docker stop container\_name|
+|Pause container|docker start container\_name|
+|Restart container|docker restart container\_name|
 
-To restart the container use the command:
+The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
 
-    $ docker start container_name
+    $ docker run -i -t -v /home/horne/Projects/datascience:/home/dst \
+        -u dst data-scientists-toolbox:0.2 \
+        sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
 
-To determine the container name use the command:
-
-    $ docker ps -a
-
-    CONTAINER ID        IMAGE                             COMMAND                CREATED             STATUS       
-    af963946e2b7        gdhorne/data-scientists-toolbox   "/usr/bin/supervisor   35 minutes ago      Up 35 minutes
-    PORTS                   NAMES
-    0.0.0.0:80->8787/tcp    boring_fermi
-
-If you prefer a memoerable name for your container use the command:
-
-    $ docker rename new_name old_name
+Without a controlling TTY the screen utility would not function.
 
