@@ -56,7 +56,7 @@ Simply logging out of the current RStudio session does not shutdown RStudio Serv
 |Get container name|docker ps -a|
 |Change container name|docker rename new\_name current\_name|
 |Stop container|docker stop container\_name|
-|Pause container|docker start container\_name|
+|Pause container|docker pause container\_name|
 |Restart container|docker restart container\_name|
 
 The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
