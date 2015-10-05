@@ -52,7 +52,7 @@ Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 8
 Simply logging out of the current RStudio session does not shutdown RStudio Server.
 
 |Action|Command|
-|======|=======|
+|------------------|----------------------------------------|
 |Get container name|docker ps -a|
 |Change container name|docker rename new\_name current\_name|
 |Stop container|docker stop container\_name|
