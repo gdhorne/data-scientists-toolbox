@@ -23,7 +23,7 @@ In this example any R packages and R scripts created will be stored on the host 
 
 Out of the gate R, RStudio, and Git are already installed as a convenience.
 
-Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'.
+Type 'http://127.0.0.1:80', or 'http://127.0.0.1' without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'.
 
 ## Build from Scratch
 
@@ -45,7 +45,15 @@ Example:
 
 If you omit the ':0.1' a default value of 'latest' is substituted.
 
-Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'. Change the password via the RStudio Tools menu select Shell and type passwd at the prompt.
+Type 'http://127.0.0.1:80', or 'http://127.0.0.1' without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'. Change the password via the RStudio Tools menu select Shell and type passwd at the prompt.
+
+The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
+
+    $ docker run -i -t -v /home/horne/Projects/datascience:/home/dst \
+        -u dst data-scientists-toolbox:0.2 \
+        sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
+
+Without a controlling TTY the screen utility would not function.
 
 ## Basic Container Management
 
@@ -59,14 +67,6 @@ Simply logging out of the current RStudio session does not shutdown RStudio Serv
 |Pause container|docker pause container\_name|
 |Restart container|docker restart container\_name|
 |Delete container|docker rm container\_name|
-
-The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
-
-    $ docker run -i -t -v /home/horne/Projects/datascience:/home/dst \
-        -u dst data-scientists-toolbox:0.2 \
-        sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
-
-Without a controlling TTY the screen utility would not function.
 
 ## Convenience Shell Scripts
 
