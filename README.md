@@ -58,6 +58,7 @@ Simply logging out of the current RStudio session does not shutdown RStudio Serv
 |Stop container|docker stop container\_name|
 |Pause container|docker pause container\_name|
 |Restart container|docker restart container\_name|
+|Delete container|docker rm container\_name|
 
 The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
 
@@ -66,4 +67,12 @@ The data-scientists-toolbox container supports command line interaction for peop
         sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
 
 Without a controlling TTY the screen utility would not function.
+
+## Convenience Shell Scripts
+
+For your convenience I added two \*nix shell scripts:
+* cli.sh - creates a container for those preferring to work directly with R and git at the command line; this container automatically launches the 'screen' utility at start-up.
+* gui.sh - creates a container for those preferring to use RStudio with full integration of R and Git within a point-and-click environment.
+
+You only run these scripts once and thereafter you can use the commands in the Basic Container Management section of the README file to stop and start an existing container created by the preceding scripts. You can have both containers running concurrently because they are completely separate instances.
 
