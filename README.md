@@ -28,7 +28,7 @@ Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 8
 The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
 
     $ docker run -i -t -v /home/horne/Projects/datascience:/home/dst \
-        -u dst data-scientists-toolbox \
+        -u dst gdhorne/data-scientists-toolbox \
         sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
 
 Without a controlling TTY the screen utility would not function.
