@@ -31,7 +31,7 @@ The data-scientists-toolbox container supports command line interaction for peop
         -u dst gdhorne/data-scientists-toolbox \
         sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
 
-Without a controlling TTY the screen utility would not function.
+Without a controlling TTY the screen utility would not function. After exiting the container it is possible to resume by using the Docker command: docker start -ai container\_name. 
 
 ## Build from Scratch
 
@@ -61,7 +61,7 @@ The data-scientists-toolbox container supports command line interaction for peop
         -u dst data-scientists-toolbox:0.1 \
         sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
 
-Without a controlling TTY the screen utility would not function.
+Without a controlling TTY the screen utility would not function. After exiting the container it is possible to resume by using the Docker command: docker start -ai container\_name.
 
 ## Basic Container Management
 
