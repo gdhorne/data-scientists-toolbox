@@ -10,16 +10,16 @@ Retrieve the image and start the container running on the specified port, option
 
 Example 1:
 
-    $ docker run -d -p 80:80 gdhorne/data-scientists-toolbox
+    $ docker run -d -p 80:8787 gdhorne/data-scientists-toolbox
 
-In this example any R packages and R scripts created will be stored inside the container. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 80. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
+In this example any R packages and R scripts created will be stored inside the container. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
 
 Example 2:
 
-    $ docker run -d -p 8008:80 -v /home/me/datascience:/home/dst \
+    $ docker run -d -p 8008:8787 -v /home/me/datascience:/home/dst \
         gdhorne/data-scientists-toolbox
 
-In this example any R packages and R scripts created will be stored on the host system instead of inside the container. You can modify the host directory from '/home/me/datascience' to whatever is suitable for your environment. The first port 8008 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 80. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
+In this example any R packages and R scripts created will be stored on the host system instead of inside the container. You can modify the host directory from '/home/me/datascience' to whatever is suitable for your environment. The first port 8008 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
 
 Out of the gate R, RStudio, and Git are already installed as a convenience.
 
@@ -41,7 +41,7 @@ Example:
     $ git clone https://github.com/gdhorne/data-scientists-toolbox
     $ cd data-scientists-toolbox	    
     $ docker build -t data-scientists-toolbox:0.1 .
-    $ docker run -d -p 80:80 -v /home/me/data:/home/dst data-scientists-toolbox:0.1 
+    $ docker run -d -p 80:8787 -v /home/me/data:/home/dst data-scientists-toolbox:0.1 
 
 If you omit the ':0.1' a default value of 'latest' is substituted.
 

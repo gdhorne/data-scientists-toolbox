@@ -101,6 +101,6 @@ RUN     mkdir -p /var/log/supervisor \
 
 VOLUME  ${HOME}
 
-EXPOSE  80
+EXPOSE  8787
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
