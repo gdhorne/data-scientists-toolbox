@@ -1,106 +1,151 @@
-# Build a Docker image for R/RStudio
+###############################################################################
+# Data Science Toolbox for Data Science Specialization                        #
+#                                                                             #
+# Build a Docker image for the Data Science Specialization                    #
+# Johns Hopkins University                                                    #
+#                                                                             #
+# Version 0.1, Copyright (C) 2015 Gregory D. Horne                            #
+#                                 (horne at member dot fsf dot org)           #
+#                                                                             #
+# Licensed under the terms of the GNU General Public license (GPL) v2         #
+###############################################################################
 
-FROM ubuntu:14.04
+
+FROM ubuntu:latest
 
 MAINTAINER "Gregory D. Horne" horne@member.fsf.org
 
 ENV     ARCH amd64
+ENV     BIOPYTHON_VERSION 1.66
 ENV     R_VERSION 3.2.2
 ENV     RSTUDIO_VERSION 0.99.484
 
 ENV     DEBIAN_FRONTEND noninteractive
 
-RUN     apt-get update \
-        && apt-get -y upgrade
+RUN		apt-get update
 
-RUN     sed -i 's/101/0/' /usr/sbin/policy-rc.d
 
-ENV     LOCALE en_GB.UTF-8
+# Configure the regional language settings
 
-RUN     apt-get install -y locales \
-        && echo ${LOCALE} UTF-8 >> /etc/locale.gen \
-        && locale-gen ${LOCALE} \
-        && /usr/sbin/update-locale LANG=${LOCALE}
+ENV     LOCALE en_US.UTF-8
 
-ENV     LC_ALL ${LOCALE}
-ENV     LANG ${LOCALE}
+RUN		dpkg-reconfigure locales \
+		&& locale-gen ${LOCALE} \
+		&& /usr/sbin/update-locale LANG=${LOCALE}
 
-ENV     USER dst
-ENV     HOME /home/${USER}
+# miscellaneous packages
+#
+RUN     apt-get install --yes --no-install-recommends \
+        libssl-dev \
+        libcurl4-gnutls-dev \
+		curl \
+        wget \
+        ca-certificates
 
-RUN     useradd ${USER} \
-        && mkdir -p ${HOME} \
-        && chown ${USER}:${USER} ${HOME} \
-        && addgroup ${USER} staff \
-        && echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} \
-        && chmod 0440 /etc/sudoers.d/${USER}
+# Git command line client
+
+RUN		apt-get install --yes git git-doc \
+		&& git config --system push.default simple
+
+
+# Statistical Computing Evironment and Programming Language
 
 RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         >> /etc/apt/sources.list \
-       	&& apt-key adv --keyserver keys.gnupg.net --recv-key 51716619E084DAB9 \ 
-	&& apt-get update \
-        && apt-get install -y --no-install-recommends \
-        r-base \
-        r-base-dev \
-        r-doc-info \
-        r-recommended \
-        libcurl4-gnutls-dev \
-        libxml2-dev
-
-RUN	sudo apt-get install -y \
-	pandoc \
-	texlive \
-	texlive-xetex \
-	pandoc-citeproc \
-	texlive-latex-extra
-
-RUN     mkdir -p /etc/R/ \
+        && apt-key adv --keyserver keyserver.ubuntu.com --recv-key 51716619E084DAB9 \
+        && apt-get update \
+        && apt-get install --yes --force-yes --no-install-recommends \
+        r-base r-base-dev r-doc-info r-recommended \
+        libxml2-dev \
+        pandoc pandoc-citeproc \
+        texlive texlive-xetex texlive-latex-extra \
+        && mkdir -p /etc/R/ \
         && echo "options(repos = list(CRAN = 'https://cran.rstudio.com/'), \
         download.file.method = 'libcurl')" \
         > /etc/R/Rprofile.site
 
-RUN     apt-get install -y --no-install-recommends \
-        curl \
-        git \
-        git-doc \
-        libapparmor1 \
-        libssl-dev \
-        libedit2 \
-        markdown \
-        psmisc \
-        supervisor \
-        sudo
 
-RUN	apt-get install screen
+# RStudio Server
 
-RUN     git config --system user.name ${USER} \
-        && git config --system user.email ${USER}@localhost \
-        && git config --system push.default simple \
-        && echo "dst:science" | chpasswd
+RUN		apt-get install --yes psmisc libapparmor1 \
+		&& wget -c -nv http://download2.rstudio.org/rstudio-server-${RSTUDIO_VERSION}-${ARCH}.deb \
+		&& dpkg -i rstudio-server-${RSTUDIO_VERSION}-${ARCH}.deb \
+		&& rm rstudio-server-${RSTUDIO_VERSION}-${ARCH}.deb
 
-RUN     apt-get install -y --no-install-recommends \
-        wget \
-        ca-certificates
+RUN		echo "r-libs-user=~/R/packages" >> /etc/rstudio/rsession.conf
 
-RUN     wget -c -nv http://download2.rstudio.org/rstudio-server-${RSTUDIO_VERSION}-${ARCH}.deb \
-        && dpkg -i rstudio-server-${RSTUDIO_VERSION}-${ARCH}.deb \
-        && rm rstudio-server-${RSTUDIO_VERSION}-${ARCH}.deb
 
-RUN     echo "r-libs-user=~/R/packages" >> /etc/rstudio/rsession.conf
+# Create default user account 
 
-ENV     PATH `which rstudio-server`:${PATH}
+ENV		DST_USER dst	
+ENV		HOME /home/${DST_USER}
 
-RUN     apt-get clean
+RUN		useradd --create-home --shell /bin/bash ${DST_USER} \
+		&& echo "${DST_USER}:science" | chpasswd \
+		&& mkdir ${HOME}/bin
 
-COPY    supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN     mkdir -p /var/log/supervisor \
-        && chgrp staff /var/log/supervisor \
-        && chmod g+w /var/log/supervisor \
-        && chgrp staff /etc/supervisor/conf.d/supervisord.conf
+# Console/terminal managememnt, text editor and text editor plug-in manager
+
+RUN		apt-get install --yes screen vim \
+		&& echo "alias vi=vim" >> ${HOME}/.bashrc \
+		&& curl -fLo ${HOME}/.vim/autoload/plug.vim --create-dirs \
+			https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
+		&& mkdir ${HOME}/data
+
+ADD		vimrc ${HOME}/.vimrc
+
+RUN		chown -R ${DST_USER}:${DST_USER} ${HOME}
+
+# WeTTY
+
+RUN		apt-get install --yes nodejs-legacy npm \
+		&& cd /tmp \
+		&& git clone https://github.com/krishnasrinivas/wetty \
+		&& cd wetty \
+		&& npm install \
+		&& mkdir /opt/wetty \
+		&& cp app.js /opt/wetty/app.js \
+		&& cp bin/wetty.js /opt/wetty/wetty.js \
+		&& sed -i 's/\.\.\/app/\/opt\/wetty\/app\.js/' /opt/wetty/wetty.js \
+		&& chmod +x /opt/wetty/wetty.js \
+		&& cp -r node_modules /opt/wetty \
+		&& cp -r public /opt/wetty \
+		&& ln -s /opt/wetty/wetty.js /usr/local/bin/wetty.js \
+		&& rm -r /tmp/wetty
+
+
+# Supervisor deamon
+
+RUN		apt-get install --yes supervisor
+
+COPY	supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN		mkdir -p /var/log/supervisor \
+		&& chgrp staff /var/log/supervisor \
+		&& chmod g+w /var/log/supervisor \
+		&& chgrp staff /etc/supervisor/conf.d/supervisord.conf
+
+
+# Clean-up installation environment
+
+RUN     apt-get clean && apt-get autoclean
+
 
 VOLUME  ${HOME}
+WORKDIR ${HOME}
 
-EXPOSE  8787
+
+# Make TCP/IP ports accessible outside the container.
+#
+# Port		Application
+# 8000		WeTTY
+# 8787		RStudio Server
+
+EXPOSE	8000 8787
+
+
+# Manages processes within the container
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+

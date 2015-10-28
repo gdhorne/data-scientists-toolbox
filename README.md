@@ -1,86 +1,156 @@
-# data-scientists-toolbox
+# Data Science Toolbox
 
-Create a Docker container for RStudio Server from scratch using the associated GitHub [repository](https://github.com/gdhorne/data-scientists-toolbox) or by fetching the pre-built [image]() from the Docker website.
+The data-science-toolbox repository makes it easy to create a Docker
+container for use during the [Data Science Specialization](https://www.coursera.org/specializations/jhudatascience).
 
-## Create a container from a Pre-built Image 
+For ease of use a script named 'container.sh' can be used to manage the entire 
+lifecycle and interaction with the Docker container. Git, R, and RStudio Server
+are installed as part of the image. Additional R packages can be added after
+the container is created.
 
-Download and install the Docker software for Apple Mac OS X, GNU/Linux or Microsoft Windows following the [instructions](http://docs.docker.com/linux/started/) at the [Docker](https://www.docker.com) website.
+There are two ways to create a Docker container for use during the Data Science
+Specialization either by fetching the pre-built  [image](https://hub.docker.com/r/gdhorne/genomic-data-science-toolbox/) from the Docker website
+or from scratch. In both scenarios the [genomic-data-science-toolbox](https://github.com/gdhorne/genomic-data-science-toolbox) repository
+available on GitHub will be beneficial.
 
-Retrieve the image and start the container running on the specified port, optionally using the host filesystem for storage as shown in the following examples.
+## Create a Docker Container from a Pre-built Image Available at Docker Hub 
 
-Example 1:
+Download and install the Docker software for Apple Mac OS X, GNU/Linux or 
+Microsoft Windows following the  [instructions](http://docs.docker.com/linux/started/) at the [Docker](https://www.docker.com) website.
 
-    $ docker run -d -p 80:8787 gdhorne/data-scientists-toolbox
+Retrieve the data-science-toolbox repository and the 
+data-science-toolbox image to create a container, and optionally 
+map a host filesystem share for storage as shown.
 
-In this example any R packages and R scripts created will be stored inside the container. The first port 80 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
+	$ git clone https://github.com/gdhorne/data-science-toolbox
+	$ ./container.sh create toolbox gdhorne/data-science-toolbox \
+							/home/me/datascience
+	$ ./container.sh status
 
-Example 2:
+## Create a Docker Container from a Locally Pre-built Image or from Scratch
 
-    $ docker run -d -p 8008:8787 -v /home/me/datascience:/home/dst \
-        gdhorne/data-scientists-toolbox
+Download and install the Docker software for Apple Mac OS X, GNU/Linux or 
+Microsoft Windows following the [instructions](http://docs.docker.com/linux/started/) at the [Docker](https://www.docker.com) website.
 
-In this example any R packages and R scripts created will be stored on the host system instead of inside the container. You can modify the host directory from '/home/me/datascience' to whatever is suitable for your environment. The first port 8008 represents the local port on which your web browser can communicate with RStudio Server which internally uses port 8787. When you run the preceding command-line you can modify the first port to avoid conflicts with another web server on the same host system.
+Retrieve the data-science-toolbox repository and the
+data-science-toolbox image to create a container, and optionally   
+map a host filesystem share for storage as shown.
 
-Out of the gate R, RStudio, and Git are already installed as a convenience.
+	$ git clone https://github.com/gdhorne/data-science-toolbox
+	$ ./container.sh create toolbox data-science-toolbox /home/me/datascience
+	$ ./container.sh status
 
-Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'.
+## Applications
 
-The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
+After creating the container these applications are accessible within a web 
+browser.
 
-    $ docker run -i -t -v /home/horne/Projects/datascience:/home/dst \
-        -u dst gdhorne/data-scientists-toolbox \
-        sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
+	Git:		Accessible via WeTTY and via RStudio integration
 
-Without a controlling TTY the screen utility would not function. After exiting the container it is possible to resume by using the Docker command: docker start -ai container\_name. 
+	R:			Accessible via WeTTY
 
-## Build from Scratch
+	RStudio:	http://127.0.0.1:8787
 
-Download and install the Docker software for Apple Mac OS X, GNU/Linux or Microsoft Windows following the [instructions](http://docs.docker.com/linux/started/) at the [Docker](https://www.docker.com) website.
+				UserID: gdst
+				Password: science
 
-Build the image and start the container running on the specified port optionally using the host filesystem for storage as shown in the example.
+	WeTTY:		http://127.0.0.1:8000
 
-    $ docker build -t image_name:version_tag path_to_dockerfile
-    $ docker run -d -p host_port:container_port \
-        -v host_directory:container_directory \
-        image_name:version_tag
+				UserID: gdst
+				Password: science
 
-Example:
+				To enable the terminal/console management utility 
+				type 'screen' and press ENTER.
 
-    $ git clone https://github.com/gdhorne/data-scientists-toolbox
-    $ cd data-scientists-toolbox	    
-    $ docker build -t data-scientists-toolbox:0.1 .
-    $ docker run -d -p 80:8787 -v /home/me/data:/home/dst data-scientists-toolbox:0.1 
 
-If you omit the ':0.1' a default value of 'latest' is substituted.
+Alternatively, the data-science-toolbox image provides a traditional 
+command line interface, without WeTTY, to some applications such as Git, 
+R, and vim. For convenience the terminal/console management utility 
+'screen' has been installed and starts automatically.
 
-Type http://127.0.0.1:80, or http://127.0.0.1 without a port number since port 80 is the default HTTP port, in the address field of a web browser to display the RStudio Server login screen. The userid is 'dst' and the default password is 'science'. Change the password via the RStudio Tools menu select Shell and type passwd at the prompt.
+	$ ./container.sh attach toolbox
 
-The data-scientists-toolbox container supports command line interaction for people with a preference for the command-line. For convenience the screen management utility 'screen' has been installed.
+Press ENTER if the container's shell prompt does not appear. To exit the 
+container and leave it running press CTRL+P, CTRL+Q; this is the preferred 
+method. To exit the container and stop it type 'exit'.
 
-    $ docker run -i -t -v /home/horne/Projects/datascience:/home/dst \
-        -u dst data-scientists-toolbox:0.1 \
-        sh -c "exec >/dev/tty 2>/dev/tty </dev/tty && /usr/bin/screen -s /bin/bash"
+## Container Management
 
-Without a controlling TTY the screen utility would not function. After exiting the container it is possible to resume by using the Docker command: docker start -ai container\_name.
-
-## Basic Container Management
-
-Simply logging out of the current RStudio session does not shutdown RStudio Server.
+The container.sh script makes managing the Docker container straight-forward 
+via a user-friendly, simplified interface to the Docker container management 
+functions covering the entire lifecycle. 
 
 |Action|Command|
 |------------------|----------------------------------------|
-|Get container name|docker ps -a|
-|Change container name|docker rename new\_name current\_name|
-|Stop container|docker stop container\_name|
-|Pause container|docker pause container\_name|
-|Restart container|docker restart container\_name|
-|Delete container|docker rm container\_name|
+|Create container|container.sh create \<container\> \<image\> [\<host\_file\_share\>]|
+|Access container|container.sh attach \<container\>|
+|Pause container|container.sh pause \<container\>|
+|Unpause container|container.sh unpause \<container\>|
+|Start container|container.sh start \<container\>|
+|Stop container|container.sh stop \<container\>|
+|Delete container|container.sh kill \<container\>|
+|Display container status|container.sh status [\<container\>]|
 
-## Convenience Shell Scripts
+Throughout these examples the container is named 'toolbox', the image is
+named 'data-science-toolbox', and the host file system share is
+'/home/me/datascience'. 
 
-For your convenience I added two \*nix shell scripts:
-* cli.sh - creates a container for those preferring to work directly with R and git at the command line; this container automatically launches the 'screen' utility at start-up.
-* gui.sh - creates a container for those preferring to use RStudio with full integration of R and Git within a point-and-click environment.
+Example 1: Create a container
 
-You only run these scripts once and thereafter you can use the commands in the Basic Container Management section of the README file to stop and start an existing container created by the preceding scripts. You can have both containers running concurrently because they are completely separate instances.
+	$ ./container.sh create toolbox data-science-toolbox:0.1 /home/me/datascience
+
+If the fourth argument is omitted the container cannot write to the host 
+file system. When you delete the container any files that you created will 
+be lost unless you commited them to a remote Git repository.
+
+Example 2: Check the status of a specific container or all containers
+
+    $ ./container.sh status toolbox
+    $ ./container.sh status
+
+The current status of all containers is reported.
+
+Example 3: Access a running container at the command line without WeTTY
+
+    $ ./container.sh attach toolbox
+
+Press ENTER if the container's shell prompt does not appear. To exit the 
+container and leave it running press CTRL+P, CTRL+Q; this is the preferred 
+method. To exit the container and stop it type 'exit'.
+
+Example 4: Pause a running container and unpause a container
+
+    $ ./container.sh pause toolbox
+    $ ./container.sh status toolbox
+    $ ./container.sh unpause toolbox
+    $ ./container.sh status toolbox
+
+Processes running within a container can be paused and will resume when unpaused.
+
+Example 5: Stop a running container and start a container
+
+    $ ./container.sh stop toolbox
+    $ ./container.sh status toolbox
+    $ ./container.sh start toolbox
+    $ ./container.sh status toolbox
+
+Any running process is shutdown potentially loosing any unsaved work.
+
+Example 6: Delete an existing container (non-recoverable)
+
+	$ ./container.sh kill toolbox
+
+A container can be deleted if it is in either started or stopped state. A 
+paused container cannot be deleted. This is a non-recoverable action.
+
+Example 7: Error handling
+
+    $ ./container.sh pause toolbox
+    $ ./container.sh stop roolbox
+    $ ./container.sh attach toolbox
+
+The container.sh script detects attempts to perform an invalid command or 
+otherwise attempt an action not possible in the current context of the 
+named container. Try the preceding sequence of commands and notice the 
+output to the console.
 
