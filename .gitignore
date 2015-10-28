@@ -1,13 +1,4 @@
-# History files
-.Rhistory
-.Rapp.history
+# .gitignore
 
-# Example code in package build process
-*-Ex.R
+.git
 
-# RStudio files
-.Rproj.user/
-
-# produced vignettes
-vignettes/*.html
-vignettes/*.pdf
