@@ -86,7 +86,7 @@ function manage_container() {
 					grep ^${3%:*} |\
 				       	cut -d\  -f1` ]
 				then
-					if [[ ! -z `echo ${3} | grep .+\/`  ]]
+					if [[ ! -z `echo ${3} | grep /`  ]]
 					then
 						docker pull ${3}
 					else
