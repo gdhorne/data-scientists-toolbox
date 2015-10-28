@@ -51,7 +51,7 @@ browser.
 
 	RStudio:	http://127.0.0.1:8787
 
-				UserID: gdst
+				UserID: dst
 				Password: science
 
 	WeTTY:		http://127.0.0.1:8000
