@@ -16,7 +16,6 @@ FROM ubuntu:latest
 MAINTAINER "Gregory D. Horne" horne@member.fsf.org
 
 ENV     ARCH amd64
-ENV     BIOPYTHON_VERSION 1.66
 ENV     R_VERSION 3.2.2
 ENV     RSTUDIO_VERSION 0.99.484
 
