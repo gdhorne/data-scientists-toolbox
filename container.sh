@@ -81,13 +81,17 @@ function manage_container() {
 		create)
 			if [[ -z `docker ps --all=true | grep ^${2}` ]]
 			then
+				echo "Building/fetching container image [${3}]."
 				if [ -z `docker images | \
 					grep ^${3%:*} |\
 				       	cut -d\  -f1` ]
 				then
-					echo -n "Building/fetching container "
-					echo "image [${3}]."
-					docker build -t ${3} .
+					if [[ ! -z `echo ${3} | grep .+\/`  ]]
+					then
+						docker pull ${3}
+					else
+						docker build -t ${3} .
+					fi
 				fi
 				echo "Creating container [${2}]."
 				if [[ -z ${4} ]]
