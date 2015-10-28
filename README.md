@@ -56,7 +56,7 @@ browser.
 
 	WeTTY:		http://127.0.0.1:8000
 
-				UserID: gdst
+				UserID: dst
 				Password: science
 
 				To enable the terminal/console management utility 
