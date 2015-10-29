@@ -81,7 +81,8 @@ ENV		HOME /home/${DST_USER}
 
 RUN		useradd --create-home --shell /bin/bash ${DST_USER} \
 		&& echo "${DST_USER}:science" | chpasswd \
-		&& mkdir ${HOME}/bin
+		&& mkdir ${HOME}/bin \
+		&& mkdir ${HOME}/tmp
 
 
 # Console/terminal managememnt, text editor and text editor plug-in manager

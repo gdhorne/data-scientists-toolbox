@@ -9,8 +9,8 @@ are installed as part of the image. Additional R packages can be added after
 the container is created.
 
 There are two ways to create a Docker container for use during the Data Science
-Specialization either by fetching the pre-built  [image](https://hub.docker.com/r/gdhorne/genomic-data-science-toolbox/) from the Docker website
-or from scratch. In both scenarios the [genomic-data-science-toolbox](https://github.com/gdhorne/genomic-data-science-toolbox) repository
+Specialization either by fetching the pre-built  [image](https://hub.docker.com/r/gdhorne/data-scientists-toolbox/) from the Docker website
+or from scratch. In both scenarios the [data-scientists-toolbox](https://github.com/gdhorne/data-scientists-toolbox) repository
 available on GitHub will be beneficial.
 
 ## Create a Docker Container from a Pre-built Image Available at Docker Hub 
@@ -22,8 +22,8 @@ Retrieve the data-science-toolbox repository and the
 data-science-toolbox image to create a container, and optionally 
 map a host filesystem share for storage as shown.
 
-	$ git clone https://github.com/gdhorne/data-science-toolbox
-	$ ./container.sh create toolbox gdhorne/data-science-toolbox \
+	$ git clone https://github.com/gdhorne/data-scientists-toolbox
+	$ ./container.sh create toolbox gdhorne/data-scientists-toolbox \
 							/home/me/datascience
 	$ ./container.sh status
 
@@ -36,8 +36,8 @@ Retrieve the data-science-toolbox repository and the
 data-science-toolbox image to create a container, and optionally   
 map a host filesystem share for storage as shown.
 
-	$ git clone https://github.com/gdhorne/data-science-toolbox
-	$ ./container.sh create toolbox data-science-toolbox /home/me/datascience
+	$ git clone https://github.com/gdhorne/data-scientists-toolbox
+	$ ./container.sh create toolbox data-scientists-toolbox /home/me/datascience
 	$ ./container.sh status
 
 ## Applications

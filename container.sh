@@ -118,7 +118,7 @@ function manage_container() {
 							--volume=/tmp/.X11-unix:/tmp/.X11-unix \
 							--env=DISPLAY=unix$DISPLAY \
 							--name=${2} \
-							--volume=${4}:/home/gdst/data \
+							--volume=${4}:/home/dst/data \
 							${3}
 				fi
 			else
