@@ -214,12 +214,12 @@ function manage_container() {
 		stop)
 			if [[ -z `docker ps --filter=name=${2} | \
 				grep --ignore-case paused` && \
-				-z `docker ps --all=true | grep ${2} | \
+				-z `docker ps --all=true | grep ^${2} | \
 				grep --ignore-case exited` ]]
 			then
 				echo "Stopping container [${2}]."
 				docker stop ${2} > /dev/null 2>&1
-			elif [[ ! -z `docker ps --all=true | grep ${2}` ]]
+			elif [[ ! -z `docker ps --all=true | grep ^${2}` ]]
 			then
 				echo "Error: Container [${2}] is not running."
 			else
@@ -230,7 +230,7 @@ function manage_container() {
 		status)
 			if [ -z ${2} ]
 			then
-				docker ps -all=true
+				docker ps -a
 			else
 				docker ps --filter=name=${2}
 			fi

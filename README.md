@@ -97,7 +97,7 @@ named 'data-science-toolbox', and the host file system share is
 
 Example 1: Create a container
 
-	$ ./container.sh create toolbox data-science-toolbox:0.1 /home/me/datascience
+	$ ./container.sh create toolbox data-science-toolbox /home/me/datascience
 
 If the fourth argument is omitted the container cannot write to the host 
 file system. When you delete the container any files that you created will 
