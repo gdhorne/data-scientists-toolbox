@@ -82,9 +82,9 @@ function manage_container() {
 			if [[ -z `docker ps --all=true | grep ^${2}` ]]
 			then
 				echo "Building/fetching container image [${3}]."
-				if [ -z `docker images | \
-					grep ^${3%:*} |\
-				       	cut -d\  -f1` ]
+				if [[ -z `docker images | \
+					grep ^${3%:*} | \
+				       	cut -d\  -f1` ]]
 				then
 					if [[ ! -z `echo ${3} | grep /`  ]]
 					then
@@ -97,29 +97,29 @@ function manage_container() {
 				if [[ -z ${4} ]]
 				then
 					docker run \
-							--detach=true \
-							--hostname=${2} \
-							--interactive=true \
-							--tty=true \
-							--publish=8000:8000 \
-							--publish=8787:8787 \
-							--volume=/tmp/.X11-unix:/tmp/.X11-unix \
-							--env=DISPLAY=unix$DISPLAY \
-							--name=${2} \
-							${3}
+						--detach=true \
+						--hostname=${2} \
+						--interactive=true \
+						--tty=true \
+						--publish=8000:8000 \
+						--publish=8787:8787 \
+						--volume=/tmp/.X11-unix:/tmp/.X11-unix \
+						--env=DISPLAY=unix$DISPLAY \
+						--name=${2} \
+						${3}
 				else
 					docker run \
-							--detach=true \
-							--hostname=${2} \
-							--interactive=true \
-							--tty=true \
-							--publish=8000:8000 \
-							--publish=8787:8787 \
-							--volume=/tmp/.X11-unix:/tmp/.X11-unix \
-							--env=DISPLAY=unix$DISPLAY \
-							--name=${2} \
-							--volume=${4}:/home/dst/data \
-							${3}
+						--detach=true \
+						--hostname=${2} \
+						--interactive=true \
+						--tty=true \
+						--publish=8000:8000 \
+						--publish=8787:8787 \
+						--volume=/tmp/.X11-unix:/tmp/.X11-unix \
+						--env=DISPLAY=unix$DISPLAY \
+						--name=${2} \
+						--volume=${4}:/home/dst/data \
+						${3}
 				fi
 			else
 				echo -n "Error: Container with name [${2}] "
@@ -212,7 +212,7 @@ function manage_container() {
 			fi
 			;;
 		stop)
-			if [[ -z `docker ps --filter=name=${2} | \
+			if [[ -z `docker ps --filter=name=^${2} | \
 				grep --ignore-case paused` && \
 				-z `docker ps --all=true | grep ^${2} | \
 				grep --ignore-case exited` ]]
@@ -285,7 +285,7 @@ function display_usage() {
 function display_version() {
 
 	echo
-	echo "Data Science Toolbox for 'Data Science Specialization'"
+	echo "Data Science Toolbox for 'Data Science Specialization'"	
 	echo "version 0.1, Copyright (C) 2015 Gregory D. Horne"
 	echo
 }
