@@ -17,7 +17,7 @@ MAINTAINER "Gregory D. Horne" horne@member.fsf.org
 
 ENV     ARCH amd64
 ENV     R_VERSION 3.2.2
-ENV     RSTUDIO_VERSION 0.99.484
+ENV     RSTUDIO_VERSION 0.99.489
 
 ENV     DEBIAN_FRONTEND noninteractive
 
@@ -58,6 +58,7 @@ RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         libxml2-dev \
         pandoc pandoc-citeproc \
         texlive texlive-xetex texlive-latex-extra \
+		libmysqlclient-dev \
         && mkdir -p /etc/R/ \
         && echo "options(repos = list(CRAN = 'https://cran.rstudio.com/'), \
         download.file.method = 'libcurl')" \

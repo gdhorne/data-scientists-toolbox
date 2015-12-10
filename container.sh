@@ -103,10 +103,10 @@ function manage_container() {
 						--tty=true \
 						--publish=8000:8000 \
 						--publish=8787:8787 \
-						--volume=/tmp/.X11-unix:/tmp/.X11-unix \
-						--env=DISPLAY=unix$DISPLAY \
 						--name=${2} \
 						${3}
+						#--volume=/tmp/.X11-unix:/tmp/.X11-unix \
+						#--env=DISPLAY=unix$DISPLAY \
 				else
 					docker run \
 						--detach=true \
@@ -115,11 +115,11 @@ function manage_container() {
 						--tty=true \
 						--publish=8000:8000 \
 						--publish=8787:8787 \
-						--volume=/tmp/.X11-unix:/tmp/.X11-unix \
-						--env=DISPLAY=unix$DISPLAY \
 						--name=${2} \
 						--volume=${4}:/home/dst/data \
 						${3}
+						#--volume=/tmp/.X11-unix:/tmp/.X11-unix \
+						#--env=DISPLAY=unix$DISPLAY \
 				fi
 			else
 				echo -n "Error: Container with name [${2}] already exists."
