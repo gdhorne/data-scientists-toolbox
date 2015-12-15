@@ -58,6 +58,7 @@ RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         libxml2-dev \
         pandoc pandoc-citeproc \
         texlive texlive-xetex texlive-latex-extra \
+		poppler-utils \
 		libmysqlclient-dev \
         && mkdir -p /etc/R/ \
         && echo "options(repos = list(CRAN = 'https://cran.rstudio.com/'), \
