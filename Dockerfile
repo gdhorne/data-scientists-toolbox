@@ -11,13 +11,13 @@
 ###############################################################################
 
 
-FROM ubuntu:latest
+FROM ubuntu:14.04
 
 MAINTAINER "Gregory D. Horne" horne@member.fsf.org
 
 ENV     ARCH amd64
 ENV     R_VERSION 3.2.2
-ENV     RSTUDIO_VERSION 0.99.489
+ENV     RSTUDIO_VERSION 0.99.878
 
 ENV     DEBIAN_FRONTEND noninteractive
 
@@ -47,6 +47,15 @@ RUN		apt-get install --yes git git-doc \
 		&& git config --system push.default simple
 
 
+# Pandoc
+
+#RUN		apt-get install \
+#		libgmp10
+
+#RUN		wget https://github.com/jgm/pandoc/releases/download/1.16.0.2/pandoc-1.16.0.2-1-amd64.deb --output-document=/tmp/pandoc-1.16.0.2-1-amd64.deb \
+#		&& dpkg --install /tmp/pandoc-1.16.0.2-1-amd64.deb \
+#		&& rm /tmp/pandoc-1.16.0.2-1-amd64.deb
+
 # Statistical Computing Evironment and Programming Language
 
 RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
@@ -56,7 +65,7 @@ RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         && apt-get install --yes --force-yes --no-install-recommends \
         r-base r-base-dev r-doc-info r-recommended \
         libxml2-dev \
-        pandoc pandoc-citeproc \
+		pandoc	pandoc-citeproc \
         texlive texlive-xetex texlive-latex-extra \
 		poppler-utils \
 		libmysqlclient-dev \
@@ -64,7 +73,7 @@ RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         && echo "options(repos = list(CRAN = 'https://cran.rstudio.com/'), \
         download.file.method = 'libcurl')" \
         > /etc/R/Rprofile.site
-
+# pandoc pandoc-citeproc
 
 # RStudio Server
 
