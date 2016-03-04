@@ -11,6 +11,8 @@
 ###############################################################################
 
 
+# ./container.sh create data-toolbox gdhorne/data-scientists-toolbox /home/me/datascience
+
 FROM ubuntu:14.04
 
 MAINTAINER "Gregory D. Horne" horne@member.fsf.org
@@ -32,8 +34,20 @@ RUN		dpkg-reconfigure locales \
 		&& locale-gen ${LOCALE} \
 		&& /usr/sbin/update-locale LANG=${LOCALE}
 
+
+ # Create default user account
+
+ENV     DST_USER dst
+ENV     HOME /home/${DST_USER}
+
+RUN     useradd --create-home --shell /bin/bash ${DST_USER} \
+        && echo "${DST_USER}:science" | chpasswd \
+        && mkdir ${HOME}/bin \
+        && mkdir ${HOME}/tmp
+
+
 # miscellaneous packages
-#
+
 RUN     apt-get install --yes --no-install-recommends \
         libssl-dev \
         libcurl4-gnutls-dev \
@@ -47,15 +61,6 @@ RUN		apt-get install --yes git git-doc \
 		&& git config --system push.default simple
 
 
-# Pandoc
-
-#RUN		apt-get install \
-#		libgmp10
-
-#RUN		wget https://github.com/jgm/pandoc/releases/download/1.16.0.2/pandoc-1.16.0.2-1-amd64.deb --output-document=/tmp/pandoc-1.16.0.2-1-amd64.deb \
-#		&& dpkg --install /tmp/pandoc-1.16.0.2-1-amd64.deb \
-#		&& rm /tmp/pandoc-1.16.0.2-1-amd64.deb
-
 # Statistical Computing Evironment and Programming Language
 
 RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
@@ -65,15 +70,33 @@ RUN     echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" \
         && apt-get install --yes --force-yes --no-install-recommends \
         r-base r-base-dev r-doc-info r-recommended \
         libxml2-dev \
-		pandoc	pandoc-citeproc \
-        texlive texlive-xetex texlive-latex-extra \
+        texlive texlive-xetex texlive-latex-extra texinfo lmodern \
 		poppler-utils \
 		libmysqlclient-dev \
         && mkdir -p /etc/R/ \
         && echo "options(repos = list(CRAN = 'https://cran.rstudio.com/'), \
-        download.file.method = 'libcurl')" \
-        > /etc/R/Rprofile.site
-# pandoc pandoc-citeproc
+        download.file.method = 'libcurl')" /etc/R/Rprofile.site \
+		&& sed -i 's/^R_LIBS_USER/#R_LIBS_USER/' /etc/R/Renviron \
+		&& echo "R_LIBS_USER=~/R/packages" >> /etc/R/Renviron \
+		&& echo "R_LIBS=~/R/packages" >> /etc/R/Renviron.site
+
+# Pandoc
+
+RUN		wget -c -nv https://github.com/jgm/pandoc/releases/download/1.16.0.2/pandoc-1.16.0.2-1-amd64.deb \
+		&& dpkg -i pandoc-1.16.0.2-1-amd64.deb \
+		&& rm pandoc-1.16.0.2-1-amd64.deb
+
+
+# Text-mode Web Browser
+
+RUN		apt-get install --yes \
+		 w3m
+
+
+# Text editor (in addition to default vim)
+
+RUN		apt-get install nano
+
 
 # RStudio Server
 
@@ -83,17 +106,6 @@ RUN		apt-get install --yes psmisc libapparmor1 \
 		&& rm rstudio-server-${RSTUDIO_VERSION}-${ARCH}.deb
 
 RUN		echo "r-libs-user=~/R/packages" >> /etc/rstudio/rsession.conf
-
-
-# Create default user account 
-
-ENV		DST_USER dst	
-ENV		HOME /home/${DST_USER}
-
-RUN		useradd --create-home --shell /bin/bash ${DST_USER} \
-		&& echo "${DST_USER}:science" | chpasswd \
-		&& mkdir ${HOME}/bin \
-		&& mkdir ${HOME}/tmp
 
 
 # Console/terminal managememnt, text editor and text editor plug-in manager

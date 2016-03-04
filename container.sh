@@ -119,7 +119,7 @@ function manage_container() {
 						--volume=${4}:/home/dst/data \
 						${3}
 						#--volume=/tmp/.X11-unix:/tmp/.X11-unix \
-						#--env=DISPLAY=unix$DISPLAY \
+						#--env=DISPLAY=unix$DISPLAY
 				fi
 			else
 				echo -n "Error: Container with name [${2}] already exists."
@@ -284,7 +284,7 @@ function display_usage() {
 function display_version() {
 
 	echo
-	echo "Data Science Toolbox for 'Data Science Specialization'"	
+	echo "Data Science Toolbox for 'Data Science Specialization'"
 	echo "version 0.1, Copyright (C) 2015 Gregory D. Horne"
 	echo
 }
