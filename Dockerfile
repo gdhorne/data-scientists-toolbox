@@ -18,8 +18,8 @@ FROM ubuntu:14.04
 MAINTAINER "Gregory D. Horne" horne@member.fsf.org
 
 ENV     ARCH amd64
-ENV     R_VERSION 3.2.2
-ENV     RSTUDIO_VERSION 0.99.878
+ENV     R_VERSION 3.2.3
+ENV     RSTUDIO_VERSION 0.99.892
 
 ENV     DEBIAN_FRONTEND noninteractive
 
@@ -54,6 +54,11 @@ RUN     apt-get install --yes --no-install-recommends \
 		curl \
         wget \
         ca-certificates
+
+# X11
+
+RUN		apt-get install --yes xvfb xauth xfonts-base
+
 
 # Git command line client
 
