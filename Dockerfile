@@ -18,7 +18,6 @@ FROM ubuntu:14.04
 MAINTAINER "Gregory D. Horne" horne@member.fsf.org
 
 ENV     ARCH amd64
-ENV     R_VERSION 3.2.3
 ENV     RSTUDIO_VERSION 0.99.892
 
 ENV     DEBIAN_FRONTEND noninteractive
@@ -35,7 +34,7 @@ RUN		dpkg-reconfigure locales \
 		&& /usr/sbin/update-locale LANG=${LOCALE}
 
 
- # Create default user account
+# Create default user account
 
 ENV     DST_USER dst
 ENV     HOME /home/${DST_USER}
